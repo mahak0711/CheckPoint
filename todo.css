@@ -1,0 +1,181 @@
+/* Universal reset and body styling */
+body, html {
+  margin: 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+/* Card styling */
+.card {
+  background: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
+  backdrop-filter: blur(10px); /* Apply blur effect */
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow for better visibility */
+  width: 300px; /* Adjust card width */
+  text-align: center; /* Center content inside the card */
+  display: flex;
+  flex-direction: column; /* Stack elements vertically */
+  align-items: center; /* Center elements horizontally */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* Optional: Add a subtle border to enhance the glass effect */
+}
+
+
+/* Form control styling */
+.form-control {
+  position: relative;
+  margin: 20px 0 40px;
+  width: 100%; /* Make the form control full width */
+  text-align: center; /* Center the form content */
+}
+
+/* Styling the input field */
+.form-control input {
+  background-color: transparent;
+  border: 0;
+  border-bottom: 2px #fff solid;
+  display: block;
+  width: 70%; /* Adjust width to make space for button */
+  padding: 15px 0;
+  font-size: 18px;
+  color: #fff;
+  margin: 0 auto; /* Center the input field */
+}
+
+/* Input focus and valid state */
+.form-control input:focus,
+.form-control input:valid {
+  outline: 0;
+  border-bottom-color: lightblue;
+}
+
+/* Positioning and styling the label */
+.form-control label {
+  position: absolute;
+  top: 15px;
+  left: 15%; /* Adjust left position based on input width */
+  pointer-events: none;
+}
+
+/* Styling the label spans */
+.form-control label span {
+  display: inline-block;
+  font-size: 18px;
+  min-width: 5px;
+  color: #fff;
+  transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Focus and valid state for label spans */
+.form-control input:focus + label span,
+.form-control input:valid + label span {
+  color: lightblue;
+  transform: translateY(-30px);
+}
+
+/* Button styling */
+button {
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+/* Todo item styling */
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0px;
+  border-bottom: 1px solid #ccc;
+  width: 100%; /* Ensure the todo item takes full width */
+  text-align: left; /* Align text to the left */
+  margin-bottom: 10px; /* Gap between todo items */
+  gap:10px;
+}
+
+.todo-item:last-child {
+  border-bottom: none;
+}
+
+.todo-item span {
+  flex-grow: 1; /* Allow the span to grow and take up space */
+}
+
+button + button {
+  margin-left: 5px;
+}
+/* Hide the default checkbox */
+.todo-item input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.todo-item .custom-checkbox {
+  position: relative;
+  display: inline-block;
+  height: 20px; /* Adjust size */
+  width: 20px; /* Adjust size */
+  background: black;
+  border-radius: 3px; /* Rounded corners */
+  transition: background 0.3s, box-shadow 0.7s;
+  margin-right: 10px; /* Space between checkbox and text */
+}
+
+/* When the checkbox is checked, add a colorful background */
+.todo-item input[type="checkbox"]:checked + .custom-checkbox {
+  background: black;
+  box-shadow: -10px -10px 20px 0px #5B51D8, 
+              0 -10px 20px 0px #833AB4, 
+              10px -10px 20px 0px #E1306C, 
+              10px 0 20px 0px #FD1D1D, 
+              10px 10px 20px 0px #F77737, 
+              0 10px 20px 0px #FCAF45, 
+              -10px 10px 20px 0px #FFDC80;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.custom-checkbox::after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.todo-item input[type="checkbox"]:checked + .custom-checkbox::after {
+  display: block;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Style for todo items */
+.todo-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #444;
+  margin-bottom: 10px; /* Space between todo items */
+  gap: 10px; /* Space between elements */
+}

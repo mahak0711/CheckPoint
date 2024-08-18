@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <link rel="stylesheet" href="todo.css">
+</head>
+<body>
+    
+    <div id="todos" class="card">
+        <div class="form-control">
+            <input id="input" required type="text">
+            <label>
+                <span style="transition-delay:350ms">T</span>
+                <span style="transition-delay:300ms">o</span>
+                <span style="transition-delay:250ms">D</span>
+                <span style="transition-delay:200ms">o</span>
+            </label>
+            <button style="margin-top: 20px;" onclick="addTodo()">Add Todo</button>
+        </div>
+        <h1>Todo List</h1>
+        <div id="root"></div>
+    
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
