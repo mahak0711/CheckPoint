@@ -1,21 +1,26 @@
-let ctr = 1;
+// Initialize Supabase client
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
 let todos = [];
 
-// Function to load todos from localStorage
-function loadTodos() {
-    const savedTodos = JSON.parse(localStorage.getItem('todos'));
-    if (savedTodos) {
-        todos = savedTodos;
-        ctr = todos.length ? Math.max(...todos.map(todo => todo.id)) + 1 : 1;
+// Fetch todos from Supabase
+async function fetchTodos() {
+    const { data, error } = await db
+        .from('todos')
+        .select('*')
+        .order('id', { ascending: true });
+
+    if (error) {
+        console.error('Error fetching todos:', error);
+        return;
     }
+
+    todos = data;
+    render(todos);
 }
 
-// Function to save todos to localStorage
-function saveTodos() {
-    localStorage.setItem('todos', JSON.stringify(todos));
-}
-
-function addTodo() {
+async function addTodo() {
     const input = document.querySelector("#input");
     const title = input.value.trim();
     
@@ -24,35 +29,65 @@ function addTodo() {
         return; // Stop execution if input is empty
     }
 
-    todos.push({
-        id: ctr++,
-        title: title,
-        completed: false // Initialize as not completed
-    });
-    input.value = ""; // Clear the input field after adding
-    saveTodos(); // Save todos to localStorage
-    render(todos);
-}
+    const { error } = await db
+        .from('todos')
+        .insert([{ title: title, completed: false }]);
 
-function deleteTodo(id) {
-    todos = todos.filter(todo => todo.id !== id);
-    saveTodos(); // Save todos to localStorage
-    render(todos);
-}
-
-function editTodo(id) {
-    const newTitle = prompt("Edit your todo:");
-    if (newTitle && newTitle.trim() !== "") {
-        todos = todos.map(todo => todo.id === id ? { ...todo, title: newTitle } : todo);
-        saveTodos(); // Save todos to localStorage
-        render(todos);
+    if (error) {
+        console.error('Error adding todo:', error);
+        alert('Error adding todo');
+    } else {
+        input.value = ""; // Clear the input field after adding
+        fetchTodos();
     }
 }
 
-function toggleComplete(id) {
-    todos = todos.map(todo => todo.id === id ? { ...todo, completed: !todo.completed } : todo);
-    saveTodos(); // Save todos to localStorage
-    render(todos);
+async function deleteTodo(id) {
+    const { error } = await db
+        .from('todos')
+        .delete()
+        .eq('id', id);
+
+    if (error) {
+        console.error('Error deleting todo:', error);
+        alert('Error deleting todo');
+    } else {
+        fetchTodos();
+    }
+}
+
+async function editTodo(id) {
+    const newTitle = prompt("Edit your todo:");
+    if (newTitle && newTitle.trim() !== "") {
+        const { error } = await db
+            .from('todos')
+            .update({ title: newTitle })
+            .eq('id', id);
+
+        if (error) {
+            console.error('Error editing todo:', error);
+            alert('Error editing todo');
+        } else {
+            fetchTodos();
+        }
+    }
+}
+
+async function toggleComplete(id) {
+    const todo = todos.find(t => t.id === id);
+    if (!todo) return;
+
+    const { error } = await db
+        .from('todos')
+        .update({ completed: !todo.completed })
+        .eq('id', id);
+
+    if (error) {
+        console.error('Error toggling complete:', error);
+        alert('Error updating todo');
+    } else {
+        fetchTodos();
+    }
 }
 
 function render(todos) {
@@ -99,7 +134,5 @@ function render(todos) {
     });
 }
 
-// Load todos from localStorage when the page is loaded
-loadTodos();
-render(todos);
- 
+// Initial fetch
+fetchTodos();
